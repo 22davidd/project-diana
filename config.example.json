@@ -1,0 +1,130 @@
+{
+  "_comment": [
+    "Example Project Diana configuration.",
+    "",
+    "This file is optional -- every setting below already has a working default",
+    "in diana/config.py. Copy it to config.json and edit only what you need:",
+    "",
+    "    cp config.example.json config.json",
+    "",
+    "Then run with:  python -m diana.main --config config.json",
+    "",
+    "Anything you leave out falls back to the default. Setting a key here that",
+    "does not exist in Config is a hard error on purpose, so a typo is loud",
+    "rather than silently ignored."
+  ],
+
+  "audio": {
+    "_comment": "Must match the model's native rate. Vosk small en-us is 16000.",
+    "sample_rate": 16000,
+    "block_ms": 30,
+    "input_device": null,
+    "idle_silence_rms": 0.008
+  },
+
+  "wake": {
+    "_comment": "Keep this short. Every extra phrase enlarges the search space.",
+    "wake_phrases": ["diana", "hey diana", "ok diana"],
+    "wake_cooldown_s": 1.5,
+    "wake_on_partial": false
+  },
+
+  "command": {
+    "_comment": [
+      "post_wake_discard_ms: audio thrown away right after the wake word, so",
+      "  your first syllable does not get mistaken for part of the command.",
+      "show_partials: print the in-progress transcript while you speak.",
+      "wake_response: what she says when she hears her name.",
+      "",
+      "command_handler: 'intents' (default) runs the rule grammar, so a",
+      "  command produces an EVENT code and she says what happened.",
+      "  'print' is the original V0 handler, which only repeats what it heard.",
+      "",
+      "command_reply: 'intent' (default) says what happened -- 'lights are now",
+      "  on.' 'echo' repeats the command verbatim, which is the best way to",
+      "  spot a mishearing, so keep it available. 'ack' says a short varied",
+      "  'Okay.' and 'none' stays silent.",
+      "",
+      "command_show_events: print the 'EVENT: LIGHTS_ON' line. This is the",
+      "  machine-readable half of the output and the one place a decision is",
+      "  unambiguous, so leave it on.",
+      "",
+      "command_known is the set of commands Diana claims to support. null",
+      "  (the default) means everything is, which is the honest setting -- the",
+      "  grammar already declines anything it cannot do. Set it to a list and",
+      "  anything outside it gets command_unsupported_response instead.",
+      "",
+      "command_placeholder_response is said for things that are understood but",
+      "  have no real source behind them yet, like weather."
+    ],
+    "post_wake_discard_ms": 180,
+    "post_speak_discard_ms": 300,
+    "command_max_s": 12.0,
+    "command_silence_s": 1.6,
+    "command_silence_rms": 0.006,
+    "show_partials": true,
+    "wake_response": "Yes?",
+    "command_handler": "intents",
+    "command_reply": "intent",
+    "command_show_events": true,
+    "command_known": null,
+    "command_unsupported_response": "I don't know how to do that yet.",
+    "command_placeholder_response": "I don't have a real source for that yet."
+  },
+
+  "chat": {
+    "_comment": [
+      "Fallback conversation. When the grammar matches nothing, the utterance",
+      "  was probably not a command, so it goes to a small local model",
+      "  instead of getting 'I don't know how to do that yet.'",
+      "",
+      "The model only ever answers. It has no access to the device registry,",
+      "  cannot emit an event code and cannot act on the house -- a command is",
+      "  handled by the grammar or not at all.",
+      "",
+      "Requires Ollama running locally, with the model already pulled:",
+      "    ollama serve",
+      "    ollama pull qwen2.5:0.5b",
+      "  Check it with:  make chat-test",
+      "",
+      "Set chat_enabled to false and everything else still works, with no",
+      "  network and no server of any kind.",
+      "",
+      "chat_timeout_s is deliberately short. A voice assistant that waits",
+      "  thirty seconds for a reply has failed more completely than one that",
+      "  admits it did not get one.",
+      "",
+      "chat_host must stay on localhost. Pointing it anywhere else sends what",
+      "  you say to your microphone to a third party."
+    ],
+    "chat_enabled": true,
+    "chat_model": "qwen2.5:0.5b",
+    "chat_host": "http://localhost:11434",
+    "chat_timeout_s": 20.0,
+    "chat_max_reply_chars": 200,
+    "chat_unavailable_response": "I didn't catch an answer to that."
+  },
+
+  "voice": {
+    "_comment": [
+      "Text-to-speech. 'auto' speaks if a voice is installed and prints",
+      "otherwise, so this section can be left alone entirely.",
+      "Fetch a voice with:  python download_models.py --voices"
+    ],
+    "tts_engine": "auto",
+    "tts_voice": "en_US-amy-medium",
+    "tts_output_device": null,
+    "tts_peak": 0.85,
+    "tts_length_scale": 1.0,
+    "tts_echo": true
+  },
+
+  "models": {
+    "stt_model": "vosk-model-small-en-us-0.15"
+  },
+
+  "runtime": {
+    "log_level": "INFO",
+    "single_instance": true
+  }
+}

@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Model weights: large, and reproducible with `make models`
+models/
+
+# Runtime state: pid file and daemon log
+var/
+
+# Local config. config.example.json is committed; config.json is yours.
+config.json

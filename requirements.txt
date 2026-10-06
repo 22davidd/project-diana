@@ -1,0 +1,23 @@
+# Project Diana -- runtime dependencies.
+#
+#   sounddevice  thin, pleasant wrapper over PortAudio for mic input/output
+#   vosk         offline speech recognition (Kaldi models), CPU-only, small
+#   numpy        audio buffers; also what every model framework expects
+#   piper-tts    offline text-to-speech (ONNX voices), CPU-only, ~60 MB per voice
+#
+# Everything runs offline; there is no API key, no account and no network call
+# at runtime. piper-tts is the only one that is not strictly required: without
+# it (or without a downloaded voice) Diana prints what she would have said,
+# which is exactly how V0 behaved.
+#
+# Install:  pip install -r requirements.txt
+#
+# Linux may also need the PortAudio system library:
+#   Debian/Ubuntu:  sudo apt install libportaudio2
+#   Fedora:         sudo dnf install portaudio
+#   Arch:           sudo pacman -S portaudio
+
+sounddevice>=0.4.6
+vosk>=0.3.45
+numpy>=1.24
+piper-tts>=1.3
